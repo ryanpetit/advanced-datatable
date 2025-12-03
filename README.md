@@ -1,73 +1,75 @@
-# React + TypeScript + Vite
+# 🧮 Advanced TanStack Datatable
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project showcases an advanced data features using [TanStack Table](https://tanstack.com/table/v8) Explore filtering, pagination, global search, and advanced filtering.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Tech Stack
 
-## React Compiler
+| 🛠️ Technology   | 🌟 Description              |
+|------------------|-----------------------------|
+| ⚛️ React       | UI library for building apps |
+| 🧑‍💻 TypeScript | Typed superset of JavaScript  |
+| 🏗️ Vite        | Fast build tool & dev server |
+| 📊 TanStack Table | Headless table logic      |
+| 🎨 TailwindCSS | Styling               |
+| 🦄 [Shadcn UI library]("https://ui.shadcn.com/) | Reusable components           |
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+---
 
-## Expanding the ESLint configuration
+## 📦 Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- 🔍 **Global Search**: Instantly filter table data
+- 🧩 **Advanced Filtering**: Multi-column, custom logic
+- 📑 **Pagination**: Easy navigation through data
+- 🎛️ **Reusable UI Components**: Buttons, inputs, selects, tables
+- ⚡ **Fast & Responsive**: Powered by Vite & React
+- 📝 **Type-Safe**: Built with TypeScript
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 🏁 Getting Started
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+**Install dependencies**
+   ```sh
+   npm install
+   ```
+**Start the dev server**
+   ```sh
+   npm run dev
+   ```
+
+---
+
+## 📂 Project Structure
+
+```
+├── public/                # Static assets
+├── src/
+│   ├── assets/            # Images & icons
+│   ├── components/        # Table & UI components
+│   │   ├── advanced-filter-examples.tsx
+│   │   ├── advanced-filter.tsx
+│   │   ├── data-table-pagination.tsx
+│   │   ├── data-table.tsx
+│   │   ├── global-search.tsx
+│   │   └── ui/            # Button, Input, Select, Table
+│   ├── lib/               # Utilities
+│   ├── App.tsx            # Main app
+│   ├── App.css            # App styles
+│   ├── main.tsx           # Entry point
+│   └── index.css          # Global styles
+├── package.json           # Project metadata
+├── vite.config.ts         # Vite config
+└── ...
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 📚 Resources and Inspiration
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- [TanStack Table Docs](https://tanstack.com/table/v8)
+- [Vite Docs](https://vitejs.dev/)
+- [Shadcn](https://ui.shadcn.com/)
+- [Dice UI](https://www.diceui.com/docs/components/data-table)
+- [Dice UI Table Example](https://tablecn.com/)
