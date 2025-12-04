@@ -154,7 +154,7 @@ const sampleProducts: ProductColumn[] = [
 export default function AdvancedTable(){
     return(
       <div>
-          <DataTable data={sampleProducts} columns={productTableColumns} Search={GlobalSearch} AdvancedSearch={AdvancedFilter}/>
+          <DataTable data={sampleProducts} columns={productTableColumns} Search={GlobalSearch} AdvancedFilter={AdvancedFilter}/>
       </div>
     )
 }
