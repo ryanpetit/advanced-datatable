@@ -118,3 +118,20 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Scroll Bar Configuration */
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 6px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #8a8a8a;
+  border-radius: 5px;
+}
+ /* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

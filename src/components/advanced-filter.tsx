@@ -29,9 +29,11 @@ interface AdvancedFilterProps<TData> {
 const OPERATORS: Record<FilterType, Array<{ value: string; label: string }>> = {
   text: [
     { value: "contains", label: "Contains" },
-    { value: "equals", label: "Equals" },
-    { value: "startsWith", label: "Starts with" },
-    { value: "endsWith", label: "Ends with" },
+    { value: "notContains", label: "Does not contain" },
+    { value: "is", label: "Is" },
+    { value: "isNot", label: "Is not" },
+    { value: "isEmpty", label: "Is empty" },
+    { value: "isNotEmpty", label: "Is not empty" },
   ],
   number: [
     { value: "=", label: "=" },
@@ -64,9 +66,11 @@ function matchesFilter(cellValue: unknown, operator: string, filterValue: unknow
   switch (filterType) {
     case "text": {
       if (operator === "contains") return cellStr.includes(filterStr)
-      if (operator === "equals") return cellStr === filterStr
-      if (operator === "startsWith") return cellStr.startsWith(filterStr)
-      if (operator === "endsWith") return cellStr.endsWith(filterStr)
+      if (operator === "notContains") return !cellStr.includes(filterStr)
+      if (operator === "is") return cellStr === filterStr
+      if (operator === "isNot") return cellStr !== filterStr
+      if (operator === "isEmpty") return cellStr === ""
+      if (operator === "isNotEmpty") return cellStr !== ""
       return true
     }
 
@@ -238,7 +242,7 @@ export function AdvancedFilter<TData>({ table }: AdvancedFilterProps<TData>) {
       </div>
 
       {isOpen && (
-        <div className="flex flex-col items-start border rounded-lg p-4 space-y-3 mt-2 bg-muted/30">
+        <div className="flex flex-col items-start p-4 space-y-3 mt-2 border">
           {filters.length === 0 ? (
             <p className="text-sm text-muted-foreground">No active filters. Click "Add Filter" to start.</p>
           ) : (
@@ -253,7 +257,7 @@ export function AdvancedFilter<TData>({ table }: AdvancedFilterProps<TData>) {
             ))
           )}
 
-          <Button variant="outline" size="sm" onClick={addFilter} className="gap-2 bg-transparent cursor-pointer">
+          <Button variant="outline" size="sm" onClick={addFilter} className="gap-2 cursor-pointer">
             <Plus className="w-4 h-4" />
             Add Filter
           </Button>
@@ -279,7 +283,7 @@ function FilterRow<TData>({ filter, columns, onUpdate, onRemove }: FilterRowProp
   return (
     <div className="flex items-start gap-2 flex-wrap">
       <Select value={filter.columnId} onValueChange={(value) => onUpdate(filter.id, { columnId: value })}>
-        <SelectTrigger className="w-40 cursor-pointer">
+        <SelectTrigger className="w-60 cursor-pointer border-0 shadow-none">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
@@ -292,7 +296,7 @@ function FilterRow<TData>({ filter, columns, onUpdate, onRemove }: FilterRowProp
       </Select>
 
       <Select value={filter.operator} onValueChange={(value) => onUpdate(filter.id, { operator: value })}>
-        <SelectTrigger className="w-[140px] cursor-pointer">
+        <SelectTrigger className="w-50 cursor-pointer border-0 shadow-none">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
@@ -334,7 +338,7 @@ function FilterValueInput({ filterType, value, options, onChange }: FilterValueI
           value={String(value || "")}
           onChange={(e) => onChange(e.target.value)}
           placeholder="Enter text..."
-          className="w-[200px]"
+          className="w-60 border-0 shadow-none"
         />
       )
     }
@@ -346,7 +350,7 @@ function FilterValueInput({ filterType, value, options, onChange }: FilterValueI
           value={typeof value === "number" ? value : (value as string) || ""}
           onChange={(e) => onChange(e.target.value ? Number(e.target.value) : "")}
           placeholder="Enter number..."
-          className="w-[150px]"
+          className="w-60 border-0 shadow-none"
         />
       )
     }
@@ -360,7 +364,7 @@ function FilterValueInput({ filterType, value, options, onChange }: FilterValueI
             value={min}
             onChange={(e) => onChange([e.target.value ? Number(e.target.value) : "", max])}
             placeholder="Min"
-            className="w-[90px]"
+            className="w-60 border-0 shadow-none"
           />
           <span className="text-sm text-muted-foreground">to</span>
           <Input
@@ -368,7 +372,7 @@ function FilterValueInput({ filterType, value, options, onChange }: FilterValueI
             value={max}
             onChange={(e) => onChange([min, e.target.value ? Number(e.target.value) : ""])}
             placeholder="Max"
-            className="w-[90px]"
+            className="w-60 border-0 shadow-none"
           />
         </div>
       )
@@ -380,7 +384,7 @@ function FilterValueInput({ filterType, value, options, onChange }: FilterValueI
           type="date"
           value={String(value || "")}
           onChange={(e) => onChange(e.target.value)}
-          className="w-40"
+          className="w-60 border-0 shadow-none"
         />
       )
     }
@@ -393,14 +397,14 @@ function FilterValueInput({ filterType, value, options, onChange }: FilterValueI
             type="date"
             value={String(start)}
             onChange={(e) => onChange([e.target.value, end])}
-            className="w-[140px]"
+            className="w-60 border-0 shadow-none"
           />
           <span className="text-sm text-muted-foreground">to</span>
           <Input
             type="date"
             value={String(end)}
             onChange={(e) => onChange([start, e.target.value])}
-            className="w-[140px]"
+            className="w-60 border-0 shadow-none"
           />
         </div>
       )
@@ -412,7 +416,7 @@ function FilterValueInput({ filterType, value, options, onChange }: FilterValueI
           value={value === true ? "true" : value === false ? "false" : ""}
           onValueChange={(v) => onChange(v === "true")}
         >
-          <SelectTrigger className="w-[120px] cursor-pointer">
+          <SelectTrigger className="w-60 cursor-pointer border-0 shadow-none">
             <SelectValue placeholder="Select..." />
           </SelectTrigger>
           <SelectContent>
@@ -426,7 +430,7 @@ function FilterValueInput({ filterType, value, options, onChange }: FilterValueI
     case "select": {
       return (
         <Select value={String(value || "")} onValueChange={onChange}>
-          <SelectTrigger className="w-[180px] cursor-pointer">
+          <SelectTrigger className="w-60 cursor-pointer border-0 shadow-none">
             <SelectValue placeholder="Select..." />
           </SelectTrigger>
           <SelectContent>
@@ -443,7 +447,7 @@ function FilterValueInput({ filterType, value, options, onChange }: FilterValueI
     case "multiSelect": {
       const selected = value ? String(value).split(",").filter(Boolean) : []
       return (
-        <div className="flex flex-wrap gap-1.5 p-2 border rounded-md bg-background w-[280px] min-h-9">
+        <div className="flex flex-wrap gap-1.5 p-2 border rounded-md bg-background w-60 min-h-9">
           {options?.map((opt) => {
             const isSelected = selected.includes(opt.value)
             return (

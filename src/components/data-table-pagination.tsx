@@ -26,7 +26,7 @@ export default function Pagination<TData>({
                                     table.setPageSize(Number(value))
                                 }}
                             >
-                                <SelectTrigger className="h-8 w-20" size="sm">
+                                <SelectTrigger className="h-8 w-20 border-0 shadow-none cursor-pointer hover:bg-accent hover:text-accent-foreground" size="sm">
                                     <SelectValue placeholder={table.getState().pagination.pageSize} />
                                 </SelectTrigger>
                                 <SelectContent side="top">
@@ -46,18 +46,22 @@ export default function Pagination<TData>({
                     </div>
                 }
             </div>
-            <div className='flex justify-between items-center pr-5'>
+            <div className='flex justify-between items-center pr-5 gap-2'>
                 {table.getState().pagination.pageIndex + 1 > 1 ?
-                    <div className="flex">
+                    <div className="flex gap-1">
                         <Button
-                            className='text-white p-1 hover:cursor-pointer'
+                            variant="outline"
+                            size="sm"
+                            className='p-1 hover:cursor-pointer text-primary border-0 shadow-none'
                             disabled={!table.getCanPreviousPage()}
                             onClick={() => table.setPageIndex(0)}
                         >
                             <ChevronsLeft className="w-6 h-6 p-0" />
                         </Button>
                         <Button
-                            className='text-white p-1 hover:cursor-pointer'
+                            variant="outline"
+                            size="sm"
+                            className='p-1 hover:cursor-pointer text-primary border-0 shadow-none'
                             disabled={!table.getCanPreviousPage()}
                             onClick={() => table.previousPage()}
                         >
@@ -74,16 +78,20 @@ export default function Pagination<TData>({
                 </div>
 
                 {table.getState().pagination.pageIndex + 1 < table.getPageCount() ?
-                    <div className="flex">
+                    <div className="flex gap-1">
                         <Button
-                            className='text-white p-1 hover:cursor-pointer'
+                            variant="outline"
+                            size="sm"
+                            className='p-1 hover:cursor-pointer text-primary border-0 shadow-none'
                             disabled={!table.getCanNextPage()}
                             onClick={() => table.nextPage()}
                         >
                             <ChevronRight className="w-5 h-5 p-0" />
                         </Button>
                         <Button
-                            className='text-white p-1 hover:cursor-pointer'
+                            variant="outline"
+                            size="sm"
+                            className='p-1 hover:cursor-pointer text-primary border-0 shadow-none'
                             disabled={!table.getCanNextPage()}
                             onClick={() => table.setPageIndex(table.getPageCount() - 1)}
                         >

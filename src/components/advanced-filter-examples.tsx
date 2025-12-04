@@ -88,68 +88,32 @@ const productTableColumns: ColumnDef<ProductColumn>[] = [
   },
 ]
 
-const sampleProducts: ProductColumn[] = [
-  {
-    name: "Wireless Headphones",
-    price: 99.99,
-    stock: 45,
-    category: "electronics",
-    tags: "new,popular",
-    inStock: true,
-    releaseDate: "2024-01-15",
-    rating: 4.5,
-  },
-  {
-    name: "Cotton T-Shirt",
-    price: 19.99,
-    stock: 120,
-    category: "clothing",
-    tags: "sale",
-    inStock: true,
-    releaseDate: "2024-03-20",
-    rating: 4.2,
-  },
-  {
-    name: "JavaScript Guide",
-    price: 34.99,
-    stock: 0,
-    category: "books",
-    tags: "popular",
-    inStock: false,
-    releaseDate: "2023-11-10",
-    rating: 4.8,
-  },
-  {
-    name: "Garden Hose",
-    price: 24.99,
-    stock: 30,
-    category: "home",
-    tags: "new,sale",
-    inStock: true,
-    releaseDate: "2024-02-05",
-    rating: 3.9,
-  },
-  {
-    name: "Smart Watch",
-    price: 249.99,
-    stock: 15,
-    category: "electronics",
-    tags: "new,limited",
-    inStock: true,
-    releaseDate: "2024-04-01",
-    rating: 4.7,
-  },
-  {
-    name: "Yoga Mat",
-    price: 39.99,
-    stock: 80,
-    category: "home",
-    tags: "popular,sale",
-    inStock: true,
-    releaseDate: "2024-01-20",
-    rating: 4.3,
-  },
-]
+const categories = ["electronics", "clothing", "books", "home"];
+const tagsList = ["new", "sale", "popular", "limited"];
+function randomTags() {
+  const tags = [];
+  for (let i = 0; i < tagsList.length; i++) {
+    if (Math.random() > 0.5) tags.push(tagsList[i]);
+  }
+  return tags.length ? tags.join(",") : tagsList[Math.floor(Math.random() * tagsList.length)];
+}
+function randomDate(start: Date, end: Date) {
+  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()))
+    .toISOString().slice(0, 10);
+}
+const sampleProducts: ProductColumn[] = Array.from({ length: 100 }, (_, i) => {
+  const category = categories[i % categories.length];
+  return {
+    name: `${["Wireless Headphones", "Cotton T-Shirt", "JavaScript Guide", "Garden Hose", "Smart Watch", "Yoga Mat"][i % 6]} ${i + 1}`,
+    price: Number((10 + Math.random() * 240).toFixed(2)),
+    stock: Math.floor(Math.random() * 200),
+    category,
+    tags: randomTags(),
+    inStock: Math.random() > 0.2,
+    releaseDate: randomDate(new Date(2023, 10, 1), new Date(2024, 4, 30)),
+    rating: Number((3.5 + Math.random() * 1.5).toFixed(1)),
+  };
+});
 
 export default function AdvancedTable(){
     return(
