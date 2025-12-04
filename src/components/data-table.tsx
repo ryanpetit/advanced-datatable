@@ -8,32 +8,38 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   getFilteredRowModel,
-  type Table as ReactTableType,
+  type VisibilityState,
 } from "@tanstack/react-table"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import Pagination from "./data-table-pagination"
-import { ArrowUpDown } from "lucide-react"
-import { type JSX, useState, useMemo } from "react"
+import { ArrowUpDown, RefreshCcw, Settings2 } from "lucide-react"
+import { useState, useMemo } from "react"
 import { Button } from "./ui/button"
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "./ui/dropdown-menu"
+import { GlobalSearch } from "./global-search"
+import { AdvancedFilter } from "./advanced-filter"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
-  PaginateList?: boolean
-  initialPageSize?: number
-  Search?: (table: { table: ReactTableType<TData> }) => JSX.Element
-  AdvancedFilter?: (table: { table: ReactTableType<TData> }) => JSX.Element
+  pagination?: boolean
+  initial_page_size?: number
+  column_visibility?: boolean
+  global_search?: boolean
+  advanced_filter?: boolean
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
-  PaginateList = true,
-  initialPageSize = 10,
-  Search,
-  AdvancedFilter,
+  initial_page_size = 10,
+  pagination = true,
+  column_visibility = false,
+  global_search = true,
+  advanced_filter = false,
 }: DataTableProps<TData, TValue>) {
   const [globalFilter, setGlobalFilter] = useState("")
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
 
   const enhancedColumns = useMemo(() => {
     return columns.map((col) => ({
@@ -58,26 +64,57 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     onGlobalFilterChange: setGlobalFilter,
     getFilteredRowModel: getFilteredRowModel(),
-    state: { globalFilter },
-    initialState: { pagination: { pageSize: initialPageSize } },
+    onColumnVisibilityChange: setColumnVisibility,
+    state: { globalFilter, columnVisibility },
+    initialState: { pagination: { pageSize: initial_page_size } },
   })
 
   return (
     <div className="w-full h-full flex flex-col justify p-5 rounded-md flex-1">
-      {Search && <Search table={table} />}
-      <div className="flex justify-between">
-        {AdvancedFilter && <AdvancedFilter table={table} />}
-        <Button
-          variant="outline"
-          size="sm"
-          className="hover:cursor-pointer mr-5"
-          onClick={() => {
-            table.reset()
-            table.resetColumnFilters()
-          }}
-        >
-          Reset Table
-        </Button>
+      {global_search && <GlobalSearch table={table} />}
+      <div className="flex justify-between items-start mb-4">
+        {advanced_filter && <AdvancedFilter table={table} />}
+        <div className="flex gap-2">
+          {column_visibility && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="ml-auto cursor-pointer bg-transparent">
+                  <Settings2 />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {table
+                  .getAllColumns()
+                  .filter((column) => column.getCanHide())
+                  .map((column) => {
+                    return (
+                      <DropdownMenuCheckboxItem
+                        key={column.id}
+                        className="capitalize"
+                        checked={column.getIsVisible()}
+                        onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                        onSelect={(e) => e.preventDefault()}
+                      >
+                        {column.id}
+                      </DropdownMenuCheckboxItem>
+                    )
+                  })}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
+          <Button
+            variant="outline"
+            size="sm"
+            className="hover:cursor-pointer bg-transparent"
+            onClick={() => {
+              table.reset()
+              table.resetColumnFilters()
+              table.resetColumnVisibility()
+            }}
+          >
+            <RefreshCcw />
+          </Button>
+        </div>
       </div>
       <Table>
         <TableHeader>
@@ -118,11 +155,15 @@ export function DataTable<TData, TValue>({
           )}
         </TableBody>
       </Table>
-      <Pagination
-        table={table}
-        selected_rows={table.getFilteredSelectedRowModel().rows.length}
-        PaginateList={PaginateList}
-      />
+
+      {pagination && (
+        <Pagination
+          table={table}
+          selected_rows={table.getFilteredSelectedRowModel().rows.length}
+          PaginateList={pagination}
+          initialPageSize={initial_page_size}
+        />
+      )}
     </div>
   )
 }

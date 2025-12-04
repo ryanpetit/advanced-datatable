@@ -1,6 +1,6 @@
 # 🧮 Advanced TanStack Datatable
 
-This project showcases an advanced data features using [TanStack Table](https://tanstack.com/table/v8) Explore filtering, pagination, global search, and advanced filtering.
+This project showcases an advanced data features using [TanStack Table](https://tanstack.com/table/v8)
 
 ---
 
@@ -22,6 +22,7 @@ This project showcases an advanced data features using [TanStack Table](https://
 - 🔍 **Global Search**: Instantly filter table data
 - 🧩 **Advanced Filtering**: Multi-column, custom logic
 - 📑 **Pagination**: Easy navigation through data
+- 👁️ **Column Visibility**: Choose which columns to hide
 - 🎛️ **Reusable UI Components**: Buttons, inputs, selects, tables
 - ⚡ **Fast & Responsive**: Powered by Vite & React
 - 📝 **Type-Safe**: Built with TypeScript

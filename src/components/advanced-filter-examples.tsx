@@ -1,7 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table"
 import { DataTable } from "./data-table"
-import { AdvancedFilter } from "./advanced-filter"
-import { GlobalSearch } from "./global-search"
 
 type ProductColumn = {
   name: string
@@ -115,10 +113,17 @@ const sampleProducts: ProductColumn[] = Array.from({ length: 100 }, (_, i) => {
   };
 });
 
-export default function AdvancedTable(){
-    return(
-      <div>
-          <DataTable data={sampleProducts} columns={productTableColumns} Search={GlobalSearch} AdvancedFilter={AdvancedFilter}/>
-      </div>
-    )
+export default function AdvancedTable() {
+  return (
+    <div>
+      {/* Optional Props
+          
+          global_search: boolean
+          advanced_filter: boolean
+          column_visibility: boolean
+          initial_page_size: number
+      */}
+      <DataTable data={sampleProducts} columns={productTableColumns} global_search={true} advanced_filter={true} column_visibility={true} />
+    </div>
+  )
 }
