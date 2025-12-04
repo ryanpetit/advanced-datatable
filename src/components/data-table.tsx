@@ -21,7 +21,7 @@ interface DataTableProps<TData, TValue> {
   PaginateList?: boolean
   initialPageSize?: number
   Search?: (table: { table: ReactTableType<TData> }) => JSX.Element
-  AdvancedSearch?: (table: { table: ReactTableType<TData> }) => JSX.Element
+  AdvancedFilter?: (table: { table: ReactTableType<TData> }) => JSX.Element
 }
 
 export function DataTable<TData, TValue>({
@@ -30,7 +30,7 @@ export function DataTable<TData, TValue>({
   PaginateList = true,
   initialPageSize = 10,
   Search,
-  AdvancedSearch,
+  AdvancedFilter,
 }: DataTableProps<TData, TValue>) {
   const [globalFilter, setGlobalFilter] = useState("")
 
@@ -73,7 +73,7 @@ export function DataTable<TData, TValue>({
         Reset Table
       </button>
       {Search && <Search table={table} />}
-      {AdvancedSearch && <AdvancedSearch table={table} />}
+      {AdvancedFilter && <AdvancedFilter table={table} />}
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
