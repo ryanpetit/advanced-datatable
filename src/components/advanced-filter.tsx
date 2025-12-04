@@ -217,9 +217,9 @@ export function AdvancedFilter<TData>({ table }: AdvancedFilterProps<TData>) {
   }
 
   return (
-    <div className="w-full py-4">
-      <div className="flex items-center gap-2 mb-4">
-        <Button variant="outline" size="sm" onClick={() => setIsOpen(!isOpen)} className="gap-2">
+    <div className="">
+      <div className="flex items-center gap-2">
+        <Button variant="outline" size="sm" onClick={() => setIsOpen(!isOpen)} className="gap-2 cursor-pointer">
           <Filter className="w-4 h-4" />
           Advanced Filters
           {filters.length > 0 && (
@@ -230,7 +230,7 @@ export function AdvancedFilter<TData>({ table }: AdvancedFilterProps<TData>) {
         </Button>
 
         {filters.length > 0 && (
-          <Button variant="ghost" size="sm" onClick={clearFilters} className="gap-2">
+          <Button variant="ghost" size="sm" onClick={clearFilters} className="gap-2 cursor-pointer">
             <X className="w-4 h-4" />
             Clear
           </Button>
@@ -238,7 +238,7 @@ export function AdvancedFilter<TData>({ table }: AdvancedFilterProps<TData>) {
       </div>
 
       {isOpen && (
-        <div className="border rounded-lg p-4 space-y-3 bg-muted/30">
+        <div className="flex flex-col items-start border rounded-lg p-4 space-y-3 mt-2 bg-muted/30">
           {filters.length === 0 ? (
             <p className="text-sm text-muted-foreground">No active filters. Click "Add Filter" to start.</p>
           ) : (
@@ -253,7 +253,7 @@ export function AdvancedFilter<TData>({ table }: AdvancedFilterProps<TData>) {
             ))
           )}
 
-          <Button variant="outline" size="sm" onClick={addFilter} className="gap-2 bg-transparent">
+          <Button variant="outline" size="sm" onClick={addFilter} className="gap-2 bg-transparent cursor-pointer">
             <Plus className="w-4 h-4" />
             Add Filter
           </Button>
@@ -279,7 +279,7 @@ function FilterRow<TData>({ filter, columns, onUpdate, onRemove }: FilterRowProp
   return (
     <div className="flex items-start gap-2 flex-wrap">
       <Select value={filter.columnId} onValueChange={(value) => onUpdate(filter.id, { columnId: value })}>
-        <SelectTrigger className="w-[160px]">
+        <SelectTrigger className="w-40 cursor-pointer">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
@@ -292,7 +292,7 @@ function FilterRow<TData>({ filter, columns, onUpdate, onRemove }: FilterRowProp
       </Select>
 
       <Select value={filter.operator} onValueChange={(value) => onUpdate(filter.id, { operator: value })}>
-        <SelectTrigger className="w-[140px]">
+        <SelectTrigger className="w-[140px] cursor-pointer">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
@@ -311,7 +311,7 @@ function FilterRow<TData>({ filter, columns, onUpdate, onRemove }: FilterRowProp
         onChange={(value) => onUpdate(filter.id, { value })}
       />
 
-      <Button variant="ghost" size="sm" onClick={() => onRemove(filter.id)} className="h-9 px-2">
+      <Button variant="ghost" size="sm" onClick={() => onRemove(filter.id)} className="h-9 px-2 cursor-pointer">
         <X className="w-4 h-4" />
       </Button>
     </div>
@@ -380,7 +380,7 @@ function FilterValueInput({ filterType, value, options, onChange }: FilterValueI
           type="date"
           value={String(value || "")}
           onChange={(e) => onChange(e.target.value)}
-          className="w-[160px]"
+          className="w-40"
         />
       )
     }
@@ -412,7 +412,7 @@ function FilterValueInput({ filterType, value, options, onChange }: FilterValueI
           value={value === true ? "true" : value === false ? "false" : ""}
           onValueChange={(v) => onChange(v === "true")}
         >
-          <SelectTrigger className="w-[120px]">
+          <SelectTrigger className="w-[120px] cursor-pointer">
             <SelectValue placeholder="Select..." />
           </SelectTrigger>
           <SelectContent>
@@ -426,7 +426,7 @@ function FilterValueInput({ filterType, value, options, onChange }: FilterValueI
     case "select": {
       return (
         <Select value={String(value || "")} onValueChange={onChange}>
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-[180px] cursor-pointer">
             <SelectValue placeholder="Select..." />
           </SelectTrigger>
           <SelectContent>
@@ -443,7 +443,7 @@ function FilterValueInput({ filterType, value, options, onChange }: FilterValueI
     case "multiSelect": {
       const selected = value ? String(value).split(",").filter(Boolean) : []
       return (
-        <div className="flex flex-wrap gap-1.5 p-2 border rounded-md bg-background w-[280px] min-h-[36px]">
+        <div className="flex flex-wrap gap-1.5 p-2 border rounded-md bg-background w-[280px] min-h-9">
           {options?.map((opt) => {
             const isSelected = selected.includes(opt.value)
             return (
@@ -455,7 +455,7 @@ function FilterValueInput({ filterType, value, options, onChange }: FilterValueI
                   onChange(newSelected.join(","))
                 }}
                 className={cn(
-                  "px-2 py-0.5 text-xs rounded transition-colors",
+                  "px-2 py-0.5 text-xs rounded transition-colors cursor-pointer",
                   isSelected ? "bg-primary text-primary-foreground" : "bg-muted hover:bg-muted/80",
                 )}
               >
