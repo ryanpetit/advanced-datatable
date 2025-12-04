@@ -17,6 +17,10 @@ This project showcases an advanced data features using [TanStack Table](https://
 
 ---
 
+![Datatable](./public/advanced-datatable.png)
+
+---
+
 ## 📦 Features
 
 - 🔍 **Global Search**: Instantly filter table data
