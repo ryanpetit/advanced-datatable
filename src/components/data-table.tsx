@@ -14,6 +14,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import Pagination from "./data-table-pagination"
 import { ArrowUpDown } from "lucide-react"
 import { type JSX, useState, useMemo } from "react"
+import { Button } from "./ui/button"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -63,17 +64,21 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="w-full h-full flex flex-col justify p-5 rounded-md flex-1">
-      <button
-        className="flex justify-end w-full hover:cursor-pointer"
-        onClick={() => {
-          table.reset()
-          table.resetColumnFilters()
-        }}
-      >
-        Reset Table
-      </button>
       {Search && <Search table={table} />}
-      {AdvancedFilter && <AdvancedFilter table={table} />}
+      <div className="flex justify-between">
+        {AdvancedFilter && <AdvancedFilter table={table} />}
+        <Button
+          variant="outline"
+          size="sm"
+          className="hover:cursor-pointer mr-5"
+          onClick={() => {
+            table.reset()
+            table.resetColumnFilters()
+          }}
+        >
+          Reset Table
+        </Button>
+      </div>
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
