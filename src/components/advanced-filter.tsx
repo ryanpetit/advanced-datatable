@@ -58,6 +58,12 @@ const OPERATORS: Record<FilterType, Array<{ value: string; label: string }>> = {
 }
 
 function matchesFilter(cellValue: unknown, operator: string, filterValue: unknown, filterType: FilterType): boolean {
+  if (operator === "isEmpty" || operator === "isNotEmpty") {
+    const cellStr = String(cellValue).trim()
+    if (operator === "isEmpty") return cellStr === ""
+    if (operator === "isNotEmpty") return cellStr !== ""
+  }
+
   if (filterValue === "" || filterValue === null || filterValue === undefined) return true
 
   const cellStr = String(cellValue).toLowerCase()
@@ -140,7 +146,6 @@ export function AdvancedFilter<TData>({ table }: AdvancedFilterProps<TData>) {
   }, [table])
 
   useEffect(() => {
-    // Group filters by column
     const filtersByColumn = filters.reduce(
       (acc, filter) => {
         if (!acc[filter.columnId]) acc[filter.columnId] = []
@@ -150,7 +155,6 @@ export function AdvancedFilter<TData>({ table }: AdvancedFilterProps<TData>) {
       {} as Record<string, FilterCondition[]>,
     )
 
-    // Apply filters to each column
     filterableColumns.forEach((column) => {
       const columnFilters = filtersByColumn[column.id]
 
@@ -160,7 +164,6 @@ export function AdvancedFilter<TData>({ table }: AdvancedFilterProps<TData>) {
         const meta = column.columnDef.meta as FilterMeta | undefined
         const filterType = meta?.filter_type || "text"
 
-        // Set a custom filter function for this column
         column.setFilterValue({
           filters: columnFilters,
           filterType,
@@ -242,7 +245,7 @@ export function AdvancedFilter<TData>({ table }: AdvancedFilterProps<TData>) {
       </div>
 
       {isOpen && (
-        <div className="flex flex-col items-start p-4 space-y-3 mt-2 border">
+        <div className="flex flex-col items-start border rounded-lg p-4 space-y-3 mt-2 bg-muted/30">
           {filters.length === 0 ? (
             <p className="text-sm text-muted-foreground">No active filters. Click "Add Filter" to start.</p>
           ) : (
@@ -257,7 +260,7 @@ export function AdvancedFilter<TData>({ table }: AdvancedFilterProps<TData>) {
             ))
           )}
 
-          <Button variant="outline" size="sm" onClick={addFilter} className="gap-2 cursor-pointer">
+          <Button variant="outline" size="sm" onClick={addFilter} className="gap-2 bg-transparent cursor-pointer">
             <Plus className="w-4 h-4" />
             Add Filter
           </Button>
@@ -280,10 +283,12 @@ function FilterRow<TData>({ filter, columns, onUpdate, onRemove }: FilterRowProp
   const filterType = meta?.filter_type || "text"
   const operators = OPERATORS[filterType]
 
+  const isInputDisabled = filter.operator === "isEmpty" || filter.operator === "isNotEmpty"
+
   return (
     <div className="flex items-start gap-2 flex-wrap">
       <Select value={filter.columnId} onValueChange={(value) => onUpdate(filter.id, { columnId: value })}>
-        <SelectTrigger className="w-60 cursor-pointer border-0 shadow-none">
+        <SelectTrigger className="w-[160px]">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
@@ -296,7 +301,7 @@ function FilterRow<TData>({ filter, columns, onUpdate, onRemove }: FilterRowProp
       </Select>
 
       <Select value={filter.operator} onValueChange={(value) => onUpdate(filter.id, { operator: value })}>
-        <SelectTrigger className="w-50 cursor-pointer border-0 shadow-none">
+        <SelectTrigger className="w-[140px]">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
@@ -313,9 +318,10 @@ function FilterRow<TData>({ filter, columns, onUpdate, onRemove }: FilterRowProp
         value={filter.value}
         options={meta?.options}
         onChange={(value) => onUpdate(filter.id, { value })}
+        isDisabled={isInputDisabled}
       />
 
-      <Button variant="ghost" size="sm" onClick={() => onRemove(filter.id)} className="h-9 px-2 cursor-pointer">
+      <Button variant="ghost" size="sm" onClick={() => onRemove(filter.id)} className="h-9 px-2">
         <X className="w-4 h-4" />
       </Button>
     </div>
@@ -327,9 +333,10 @@ interface FilterValueInputProps {
   value: string | number | boolean | string[] | unknown
   options?: Array<{ label: string; value: string }>
   onChange: (value: string | number | boolean | string[] | unknown) => void
+  isDisabled?: boolean
 }
 
-function FilterValueInput({ filterType, value, options, onChange }: FilterValueInputProps) {
+function FilterValueInput({ filterType, value, options, onChange, isDisabled }: FilterValueInputProps) {
   switch (filterType) {
     case "text": {
       return (
@@ -338,7 +345,8 @@ function FilterValueInput({ filterType, value, options, onChange }: FilterValueI
           value={String(value || "")}
           onChange={(e) => onChange(e.target.value)}
           placeholder="Enter text..."
-          className="w-60 border-0 shadow-none"
+          className="w-[200px]"
+          disabled={isDisabled}
         />
       )
     }
@@ -350,7 +358,8 @@ function FilterValueInput({ filterType, value, options, onChange }: FilterValueI
           value={typeof value === "number" ? value : (value as string) || ""}
           onChange={(e) => onChange(e.target.value ? Number(e.target.value) : "")}
           placeholder="Enter number..."
-          className="w-60 border-0 shadow-none"
+          className="w-[150px]"
+          disabled={isDisabled}
         />
       )
     }
@@ -364,7 +373,8 @@ function FilterValueInput({ filterType, value, options, onChange }: FilterValueI
             value={min}
             onChange={(e) => onChange([e.target.value ? Number(e.target.value) : "", max])}
             placeholder="Min"
-            className="w-60 border-0 shadow-none"
+            className="w-[90px]"
+            disabled={isDisabled}
           />
           <span className="text-sm text-muted-foreground">to</span>
           <Input
@@ -372,7 +382,8 @@ function FilterValueInput({ filterType, value, options, onChange }: FilterValueI
             value={max}
             onChange={(e) => onChange([min, e.target.value ? Number(e.target.value) : ""])}
             placeholder="Max"
-            className="w-60 border-0 shadow-none"
+            className="w-[90px]"
+            disabled={isDisabled}
           />
         </div>
       )
@@ -384,7 +395,8 @@ function FilterValueInput({ filterType, value, options, onChange }: FilterValueI
           type="date"
           value={String(value || "")}
           onChange={(e) => onChange(e.target.value)}
-          className="w-60 border-0 shadow-none"
+          className="w-[160px]"
+          disabled={isDisabled}
         />
       )
     }
@@ -397,14 +409,16 @@ function FilterValueInput({ filterType, value, options, onChange }: FilterValueI
             type="date"
             value={String(start)}
             onChange={(e) => onChange([e.target.value, end])}
-            className="w-60 border-0 shadow-none"
+            className="w-[140px]"
+            disabled={isDisabled}
           />
           <span className="text-sm text-muted-foreground">to</span>
           <Input
             type="date"
             value={String(end)}
             onChange={(e) => onChange([start, e.target.value])}
-            className="w-60 border-0 shadow-none"
+            className="w-[140px]"
+            disabled={isDisabled}
           />
         </div>
       )
@@ -415,8 +429,9 @@ function FilterValueInput({ filterType, value, options, onChange }: FilterValueI
         <Select
           value={value === true ? "true" : value === false ? "false" : ""}
           onValueChange={(v) => onChange(v === "true")}
+          disabled={isDisabled}
         >
-          <SelectTrigger className="w-60 cursor-pointer border-0 shadow-none">
+          <SelectTrigger className="w-[120px]">
             <SelectValue placeholder="Select..." />
           </SelectTrigger>
           <SelectContent>
@@ -429,8 +444,8 @@ function FilterValueInput({ filterType, value, options, onChange }: FilterValueI
 
     case "select": {
       return (
-        <Select value={String(value || "")} onValueChange={onChange}>
-          <SelectTrigger className="w-60 cursor-pointer border-0 shadow-none">
+        <Select value={String(value || "")} onValueChange={onChange} disabled={isDisabled}>
+          <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Select..." />
           </SelectTrigger>
           <SelectContent>
@@ -447,7 +462,7 @@ function FilterValueInput({ filterType, value, options, onChange }: FilterValueI
     case "multiSelect": {
       const selected = value ? String(value).split(",").filter(Boolean) : []
       return (
-        <div className="flex flex-wrap gap-1.5 p-2 border rounded-md bg-background w-60 min-h-9">
+        <div className="flex flex-wrap gap-1.5 p-2 border rounded-md bg-background w-[280px] min-h-[36px]">
           {options?.map((opt) => {
             const isSelected = selected.includes(opt.value)
             return (
@@ -459,9 +474,10 @@ function FilterValueInput({ filterType, value, options, onChange }: FilterValueI
                   onChange(newSelected.join(","))
                 }}
                 className={cn(
-                  "px-2 py-0.5 text-xs rounded transition-colors cursor-pointer",
+                  "px-2 py-0.5 text-xs rounded transition-colors",
                   isSelected ? "bg-primary text-primary-foreground" : "bg-muted hover:bg-muted/80",
                 )}
+                disabled={isDisabled}
               >
                 {opt.label}
               </button>
