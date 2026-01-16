@@ -1,6 +1,6 @@
 # 🧮 Advanced TanStack Datatable
 
-This project showcases an advanced data features using [TanStack Table](https://tanstack.com/table/v8)
+This project showcases an advanced datatable using features from [TanStack Table](https://tanstack.com/table/v8)
 
 ---
 
