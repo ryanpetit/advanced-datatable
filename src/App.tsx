@@ -7,13 +7,14 @@ import { Moon, SunMedium } from 'lucide-react';
 function ThemeToggle() {
   const { theme, setTheme } = useContext(ThemeContext);
   return (
-    <button
+    <Button
+      variant="outline" size="sm" className="ml-auto cursor-pointer bg-transparent"
       onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
       style={{ position: 'absolute', top: 16, right: 16 }}
       aria-label="Toggle theme"
     >
       {theme === 'light' ? <Moon /> : <SunMedium />}
-    </button>
+    </Button>
   );
 }
 
