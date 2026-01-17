@@ -22,7 +22,7 @@ function rowAction({ selectedRows }: { selectedRows: ProductColumn[] }) {
       <DialogTrigger asChild>
         <Button variant="outline" size="sm" className="ml-auto cursor-pointer bg-transparent"><Settings width={14} height={14} /></Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="overflow-y-scroll max-h-[80vh]">
         <DialogTitle>Selected Rows</DialogTitle>
         <DialogDescription>
           You have selected {selectedRows.length} row(s):
@@ -175,3 +175,4 @@ export default function AdvancedTable() {
     </div>
   )
 }
+
