@@ -3,6 +3,7 @@ import AdvancedTable from './components/advanced-filter-examples'
 import {useContext} from 'react';
 import { ThemeContext } from './components/theme-provider';
 import { Moon, SunMedium } from 'lucide-react';
+import { Button } from './components/ui/button';
 
 function ThemeToggle() {
   const { theme, setTheme } = useContext(ThemeContext);
