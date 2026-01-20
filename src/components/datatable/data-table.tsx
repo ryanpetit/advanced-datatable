@@ -14,8 +14,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import Pagination from "./data-table-pagination"
 import { ArrowUpDown, RefreshCcw, Settings2 } from "lucide-react"
 import { useState, useMemo } from "react"
-import { Button } from "./ui/button"
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "./ui/dropdown-menu"
+import { Button } from "../ui/button"
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "../ui/dropdown-menu"
 import { GlobalSearch } from "./global-search"
 import { AdvancedFilter } from "./advanced-filter"
 import { AdvancedSort } from "./advanced-sort"
@@ -29,7 +29,7 @@ interface DataTableProps<TData, TValue> {
   global_search?: boolean
   advanced_filter?: boolean
   advanced_sort?: boolean
-  RowAction?: React.ComponentType<{ selectedRows: TData[]}>
+  RowAction?: React.ComponentType<{ selectedRows: TData[] }>
 }
 
 export function DataTable<TData, TValue>({

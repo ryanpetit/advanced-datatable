@@ -1,6 +1,6 @@
 import './App.css'
-import AdvancedTable from './components/advanced-filter-examples'
-import {useContext} from 'react';
+import AdvancedTable from './components/datatable/advanced-filter-examples'
+import { useContext } from 'react';
 import { ThemeContext } from './components/theme-provider';
 import { Moon, SunMedium } from 'lucide-react';
 import { Button } from './components/ui/button';

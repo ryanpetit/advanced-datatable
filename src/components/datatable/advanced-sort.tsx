@@ -3,9 +3,9 @@
 import type { Table, Column } from "@tanstack/react-table"
 import { useState, useMemo } from "react"
 import { X, ArrowUpDown, Plus, ArrowUpAZ, ArrowDownAZ } from "lucide-react"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
-import { Button } from "./ui/button"
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
+import { Button } from "../ui/button"
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 
 export type SortDirection = "asc" | "desc"
 
