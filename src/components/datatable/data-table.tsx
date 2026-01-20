@@ -29,6 +29,7 @@ interface DataTableProps<TData, TValue> {
   global_search?: boolean
   advanced_filter?: boolean
   advanced_sort?: boolean
+  table_reset?: boolean
   RowAction?: React.ComponentType<{ selectedRows: TData[] }>
 }
 
@@ -37,10 +38,11 @@ export function DataTable<TData, TValue>({
   data,
   initial_page_size = 10,
   pagination = true,
-  column_visibility = false,
+  column_visibility = true,
   global_search = true,
-  advanced_filter = false,
-  advanced_sort = false,
+  advanced_filter = true,
+  advanced_sort = true,
+  table_reset = true,
   RowAction,
 }: DataTableProps<TData, TValue>) {
   const [globalFilter, setGlobalFilter] = useState("")
@@ -111,6 +113,7 @@ export function DataTable<TData, TValue>({
               </DropdownMenuContent>
             </DropdownMenu>
           )}
+          {table_reset && (
           <Button
             variant="outline"
             size="sm"
@@ -126,6 +129,7 @@ export function DataTable<TData, TValue>({
           >
             <RefreshCcw />
           </Button>
+          )}
           {
             Object.keys(rowSelection).length > 0 &&
             RowAction && <RowAction selectedRows={table.getSelectedRowModel().rows.map(row => row.original)} />
