@@ -167,11 +167,12 @@ export default function AdvancedTable() {
           
           global_search: boolean
           advanced_filter: boolean
+          advanced_sort: boolean
           column_visibility: boolean
           initial_page_size: number
           RowAction: React.ComponentType<{ selectedRows: TData[]}>
       */}
-      <DataTable data={sampleProducts} columns={productTableColumns} global_search={true} advanced_filter={true} column_visibility={true} RowAction={rowAction} />
+      <DataTable data={sampleProducts} columns={productTableColumns} global_search={true} advanced_filter={true} advanced_sort={true} column_visibility={true} RowAction={rowAction} />
     </div>
   )
 }
